@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cestovní příkaz – Generátor</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="#e94560"/>
+                    <path d="M8 12h16M8 16h12M8 20h14M22 10l4 6-4 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div>
+                    <h1>Cestovní příkaz</h1>
+                    <span class="subtitle">Generátor & vyúčtování</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" id="btnFavorites" title="Oblíbené trasy">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span class="btn-label">Oblíbené</span>
+                </button>
+                <button class="btn btn-ghost" id="btnHistory" title="Historie">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span class="btn-label">Historie</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Form Type Selector -->
+            <section class="card type-selector">
+                <div class="card-header">
+                    <h2>Typ formuláře</h2>
+                </div>
+                <div class="type-buttons">
+                    <button class="type-btn active" data-type="club">
+                        <span class="type-icon">🏸</span>
+                        <span class="type-name">Klubový cestovní příkaz</span>
+                        <span class="type-desc">Extraliga, turnaje</span>
+                    </button>
+                    <button class="type-btn" data-type="cbas">
+                        <span class="type-icon">🏛️</span>
+                        <span class="type-name">Svazový cestovní příkaz</span>
+                        <span class="type-desc">ČBaS – dvoustranný</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Personal Info -->
+            <section class="card" id="sectionPersonal">
+                <div class="card-header">
+                    <h2>Osobní údaje</h2>
+                    <button class="btn btn-sm btn-ghost" id="btnSaveProfile" title="Uložit jako výchozí profil">Uložit profil</button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group span-2">
+                        <label for="fullName">Příjmení, jméno, titul</label>
+                        <input type="text" id="fullName" placeholder="např. Mazúr Jakub">
+                    </div>
+                    <div class="form-group span-2">
+                        <label for="address">Bydliště</label>
+                        <input type="text" id="address" placeholder="např. Kounicova 12, Brno">
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Útvar</label>
+                        <input type="text" id="department" placeholder="např. Badminton">
+                    </div>
+                    <div class="form-group">
+                        <label for="personalNumber">Osobní číslo</label>
+                        <input type="text" id="personalNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <input type="text" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankAccount">Číslo účtu</label>
+                        <input type="text" id="bankAccount" placeholder="např. 123456789/0100">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trip Info -->
+            <section class="card" id="sectionTrip">
+                <div class="card-header">
+                    <h2>Údaje o cestě</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group span-2">
+                        <label for="tripPurpose">Účel a průběh cesty</label>
+                        <input type="text" id="tripPurpose" placeholder="např. Extraliga 2025/26">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripStart">Počátek cesty (místo)</label>
+                        <input type="text" id="tripStart" placeholder="např. Brno">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripStartDate">Datum a čas odjezdu</label>
+                        <input type="datetime-local" id="tripStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripDestination">Místo jednání</label>
+                        <input type="text" id="tripDestination" placeholder="např. Ostrava">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripEndDate">Datum a čas návratu</label>
+                        <input type="datetime-local" id="tripEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripEnd">Konec cesty (místo)</label>
+                        <input type="text" id="tripEnd" placeholder="např. Brno">
+                    </div>
+                    <div class="form-group span-2">
+                        <label for="companions">Spolucestující</label>
+                        <input type="text" id="companions" placeholder="např. Danielius Beržanskis, Matěj Hubáček">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vehicle & Rates -->
+            <section class="card" id="sectionVehicle">
+                <div class="card-header">
+                    <h2>Dopravní prostředek</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="vehicleType">Typ</label>
+                        <select id="vehicleType">
+                            <option value="AUV">AUV – auto vlastní</option>
+                            <option value="AUS">AUS – auto služební</option>
+                            <option value="O">O – osobní vlak</option>
+                            <option value="R">R – rychlík</option>
+                            <option value="A">A – autobus</option>
+                            <option value="L">L – letadlo</option>
+                            <option value="MOS">MOS – motocykl služ.</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehiclePlate">SPZ / popis</label>
+                        <input type="text" id="vehiclePlate" placeholder="např. EL519DX">
+                    </div>
+                    <div class="form-group">
+                        <label for="ratePerKm">Sazba Kč/km</label>
+                        <input type="number" id="ratePerKm" value="4.50" step="0.10" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="surchargePercent">Přirážka na pojíždění (%)</label>
+                        <input type="number" id="surchargePercent" value="10" step="5" min="0" max="50">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Legs / Route segments -->
+            <section class="card" id="sectionLegs">
+                <div class="card-header">
+                    <h2>Trasy (úseky cesty)</h2>
+                    <button class="btn btn-sm btn-primary" id="btnAddLeg">+ Přidat úsek</button>
+                </div>
+                <div class="legs-info">
+                    <p>Zadejte jednotlivé úseky cesty. Kilometry se automaticky vyhledají a zaokrouhlí na 5 km (+ přirážka).</p>
+                </div>
+                <div id="legsContainer"></div>
+                <div class="legs-summary" id="legsSummary">
+                    <div class="summary-item">
+                        <span>Celkem km</span>
+                        <strong id="totalKm">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Celkem jízdné</span>
+                        <strong id="totalFare">0 Kč</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Costs -->
+            <section class="card" id="sectionCosts">
+                <div class="card-header">
+                    <h2>Další náklady</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="mealAllowance">Stravné (Kč)</label>
+                        <input type="number" id="mealAllowance" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="accommodation">Nocležné (Kč)</label>
+                        <input type="number" id="accommodation" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="otherCosts">Vedlejší výdaje (Kč)</label>
+                        <input type="number" id="otherCosts" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="advance">Záloha (Kč)</label>
+                        <input type="number" id="advance" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="freeFood"> Bezplatné stravování
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ČBaS-only fields -->
+            <section class="card cbas-only" id="sectionCbas" style="display:none;">
+                <div class="card-header">
+                    <h2>Svazové údaje (ČBaS)</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="opNumber">Číslo OP</label>
+                        <input type="text" id="opNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="workHoursFrom">Pracovní doba od</label>
+                        <input type="time" id="workHoursFrom">
+                    </div>
+                    <div class="form-group">
+                        <label for="workHoursTo">Pracovní doba do</label>
+                        <input type="time" id="workHoursTo">
+                    </div>
+                    <div class="form-group">
+                        <label for="expectedCosts">Předpokládaná částka výdajů (Kč)</label>
+                        <input type="number" id="expectedCosts" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="advanceDate">Záloha vyplacená dne</label>
+                        <input type="date" id="advanceDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="reportDate">Zpráva podána dne</label>
+                        <input type="date" id="reportDate">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Generate -->
+            <section class="card generate-section">
+                <div class="generate-grid">
+                    <div class="total-box">
+                        <span class="total-label">Celkem k vyplacení</span>
+                        <span class="total-amount" id="grandTotal">0 Kč</span>
+                    </div>
+                    <div class="generate-actions">
+                        <button class="btn btn-large btn-primary" id="btnGenerate">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            Generovat PDF
+                        </button>
+                        <button class="btn btn-ghost" id="btnSaveDraft">Uložit koncept</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Favorites Modal -->
+        <div class="modal" id="modalFavorites">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Oblíbené trasy</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body" id="favoritesBody">
+                    <p class="empty-state">Zatím žádné oblíbené trasy. Uložte trasu pomocí ⭐ u úseku cesty.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div class="modal" id="modalHistory">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Historie výkazů</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body" id="historyBody">
+                    <p class="empty-state">Zatím žádné uložené výkazy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
