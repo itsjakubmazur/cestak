@@ -16,6 +16,7 @@
     --accent-glow: rgba(233, 69, 96, 0.15);
     --success: #2ed573;
     --warning: #ffa502;
+    --error: #e94560;
     --border: #2a2a4a;
     --border-focus: #e94560;
     --radius-sm: 6px;
@@ -102,11 +103,16 @@ body {
     white-space: nowrap;
 }
 
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .btn-primary {
     background: var(--accent);
     color: #fff;
 }
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     background: var(--accent-hover);
     box-shadow: 0 4px 20px var(--accent-glow);
 }
@@ -143,6 +149,21 @@ body {
 .btn-danger:hover {
     background: rgba(233,69,96,0.1);
     border-color: var(--accent);
+}
+
+/* ---- SPINNER ---- */
+.btn-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ---- MAIN CONTENT ---- */
@@ -286,6 +307,19 @@ input[type="checkbox"] {
     width: 1.1rem;
     height: 1.1rem;
     accent-color: var(--accent);
+}
+
+/* ---- MEAL HINT ---- */
+.meal-hint {
+    font-size: 0.75rem;
+    color: var(--success);
+    padding: 0.2rem 0;
+    display: none;
+    transition: all var(--transition);
+}
+
+.meal-hint:hover {
+    text-decoration: underline;
 }
 
 /* ---- LEGS ---- */
@@ -606,6 +640,51 @@ input[type="checkbox"] {
     color: var(--text-secondary);
 }
 
+/* ---- TOAST NOTIFICATIONS ---- */
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.toast {
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    max-width: 350px;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast-success {
+    border-left: 3px solid var(--success);
+}
+
+.toast-error {
+    border-left: 3px solid var(--error);
+}
+
+.toast-info {
+    border-left: 3px solid var(--text-secondary);
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width: 480px) {
     .form-grid {
@@ -614,16 +693,69 @@ input[type="checkbox"] {
     .form-group.span-2 { grid-column: span 1; }
     .type-buttons { grid-template-columns: 1fr; }
     .generate-grid { flex-direction: column; align-items: flex-start; }
-    .generate-actions { width: 100%; }
+    .generate-actions { width: 100%; flex-wrap: wrap; }
     .generate-actions .btn-large { flex: 1; }
     .main-content { padding: 0.5rem; }
     .card { padding: 1rem; }
     .total-amount { font-size: 1.4rem; }
+
+    .toast-container {
+        bottom: 1rem;
+        right: 0.5rem;
+        left: 0.5rem;
+    }
+    .toast { max-width: 100%; }
 }
 
 /* ---- PRINT ---- */
 @media print {
-    body { background: #fff; color: #000; }
-    .app-header, .type-selector, .generate-section, .btn, .legs-info { display: none; }
-    .card { box-shadow: none; border: 1px solid #ccc; }
+    body {
+        background: #fff;
+        color: #000;
+        background-image: none;
+    }
+    .app-header, .type-selector, .generate-section,
+    .btn, .legs-info, .toast-container { display: none; }
+    .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        background: #fff;
+        break-inside: avoid;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="time"],
+    select {
+        border: none;
+        border-bottom: 1px solid #999;
+        background: transparent;
+        box-shadow: none;
+        color: #000;
+        padding: 0.3rem 0;
+    }
+    .form-group label {
+        color: #555;
+    }
+    .leg-item {
+        background: #fff;
+        border: 1px solid #ccc;
+    }
+    .leg-number {
+        color: #333;
+        background: #eee;
+    }
+    .km-badge {
+        color: #333;
+        background: #eee;
+    }
+    .leg-actions { display: none; }
+    .btn-lookup { display: none; }
+    .legs-summary {
+        border-top: 1px solid #999;
+    }
+    .summary-item span { color: #555; }
+    .summary-item strong { color: #000; }
+    .main-content { max-width: 100%; padding: 0; }
 }
