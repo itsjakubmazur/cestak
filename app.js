@@ -792,15 +792,26 @@ async function generatePDF() {
     btn.innerHTML = '<span class="btn-spinner"></span> Generuji PDF...';
 
     try {
-        // Dynamically load jsPDF if not loaded
+        // Try dynamic load if jsPDF wasn't loaded via <script> tag
         if (!window.jspdf) {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
-            document.head.appendChild(script);
-            await new Promise((resolve, reject) => {
-                script.onload = resolve;
-                script.onerror = () => reject(new Error('Nelze načíst knihovnu pro PDF.'));
-            });
+            const cdns = [
+                'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js',
+                'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+            ];
+            let loaded = false;
+            for (const src of cdns) {
+                try {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    document.head.appendChild(script);
+                    await new Promise((resolve, reject) => {
+                        script.onload = resolve;
+                        script.onerror = reject;
+                    });
+                    if (window.jspdf) { loaded = true; break; }
+                } catch { /* try next CDN */ }
+            }
+            if (!loaded) throw new Error('Nelze načíst knihovnu pro PDF. Zkontrolujte připojení k internetu.');
         }
 
         const { jsPDF } = window.jspdf;
